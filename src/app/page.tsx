@@ -155,6 +155,11 @@ function HomePage() {
             </button>
           </div>
         </div>
+        <div className="flex sm:flex-row flex-col gap-4 items-center justify-center mb-6">
+          <h3 className="sm:text-xl text-lg font-bold">
+            Visited: {selectedStates.length} / {STATES.length}
+          </h3>
+        </div>
         <div className="flex mb-10">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="40,0 1000,589">
             {STATES.map((state) => (
