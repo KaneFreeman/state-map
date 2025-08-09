@@ -28,7 +28,7 @@ function EmbeddedMapPage() {
             <g
               key={`map-embed-${state.abbreviation}`}
               className={
-                selectedStates.includes(state.abbreviation) ? 'bg-indigo-600 text-indigo-600' : 'bg-white text-white'
+                selectedStates.includes(state.abbreviation) ? 'bg-purple-600 text-purple-600' : 'bg-white text-white'
               }
               strokeWidth={1}
             >

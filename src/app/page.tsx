@@ -77,7 +77,7 @@ function HomePage() {
           <div className="relative flex gap-2">
             <button
               onClick={handleEmbed}
-              className="inline-flex items-center gap-2 rounded-md border border-indigo-600 px-3 py-1.5 text-indigo-600 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="inline-flex items-center gap-2 rounded-md border border-purple-600 px-3 py-1.5 text-purple-600 hover:bg-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
               disabled={selectedStates.length === 0}
             >
               {copiedEmbed ? (
@@ -116,7 +116,7 @@ function HomePage() {
             </button>
             <button
               onClick={handleShare}
-              className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="inline-flex items-center gap-2 rounded-md bg-purple-600 px-3 py-1.5 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
               disabled={selectedStates.length === 0}
             >
               {copied ? (
@@ -168,8 +168,8 @@ function HomePage() {
                 onClick={($event) => toggleState($event, state)}
                 className={`transition-colors duration-[100ms]  ${
                   selectedStates.includes(state.abbreviation)
-                    ? 'bg-indigo-600 text-indigo-600 hover:bg-indigo-800 hover:text-indigo-800'
-                    : 'bg-white text-white hover:bg-indigo-200 hover:text-indigo-200'
+                    ? 'bg-purple-600 text-purple-600 hover:bg-purple-800 hover:text-purple-800'
+                    : 'bg-white text-white hover:bg-purple-200 hover:text-purple-200'
                 }`}
               >
                 <title>{state.name}</title>
@@ -184,7 +184,7 @@ function HomePage() {
               key={state.abbreviation}
               onClick={($event) => toggleState($event, state)}
               className={`p-4 rounded-lg border ${
-                selectedStates.includes(state.abbreviation) ? 'bg-indigo-600 text-white' : 'bg-white text-gray-800'
+                selectedStates.includes(state.abbreviation) ? 'bg-purple-600 text-white' : 'bg-white text-gray-800'
               }`}
             >
               {state.name}
