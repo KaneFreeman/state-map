@@ -41,8 +41,24 @@ export default function Home() {
     });
   };
 
+  const [copiedEmbed, setCopiedEmbed] = useState(false);
+  const handleEmbed = () => {
+    if (selectedStates.length === 0) {
+      return;
+    }
+
+    navigator.clipboard.writeText(window.location.href.replace('/?', '/embed?')).then(() => {
+      setCopiedEmbed(true);
+      setTimeout(() => setCopiedEmbed(false), 5000);
+    });
+  };
+
   const [copied, setCopied] = useState(false);
   const handleShare = () => {
+    if (selectedStates.length === 0) {
+      return;
+    }
+
     navigator.clipboard.writeText(window.location.href).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 5000);
@@ -58,12 +74,52 @@ export default function Home() {
       </header>
 
       <main className="max-w-7xl mx-auto px-6 sm:py-8 py-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex sm:flex-row flex-col gap-4 items-center justify-between mb-6">
           <h2 className="sm:text-2xl text-xl font-bold">Click states to select them</h2>
-          <div className="relative">
+          <div className="relative flex gap-2">
+            <button
+              onClick={handleEmbed}
+              className="inline-flex items-center gap-2 rounded-md border border-indigo-600 px-3 py-1.5 text-indigo-600 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              disabled={selectedStates.length === 0}
+            >
+              {copiedEmbed ? (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  Copied
+                </>
+              ) : (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"
+                    />
+                  </svg>
+                  Embed
+                </>
+              )}
+            </button>
             <button
               onClick={handleShare}
               className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              disabled={selectedStates.length === 0}
             >
               {copied ? (
                 <>
