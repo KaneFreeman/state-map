@@ -16,7 +16,7 @@ function EmbeddedMapPage() {
           Visited: {selectedStates.length} / {STATES.length}
         </h2>
       </div>
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="bg-white flex items-center justify-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="40 0 1000 589"
