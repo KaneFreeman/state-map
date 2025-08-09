@@ -1,26 +1,24 @@
 'use client';
 
 import { type State, STATES } from '@/data/states';
-import { MouseEvent, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { MouseEvent, Suspense, useEffect, useState } from 'react';
 
-export default function Home() {
+function HomePage() {
+  const searchParams = useSearchParams();
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
 
   useEffect(() => {
-    // Load from localStorage
-    const stored = localStorage.getItem('selectedStates');
-    if (stored) {
-      setSelectedStates(stored.split(','));
+    const statesParam = searchParams.get('states') || '';
+    if (statesParam) {
+      setSelectedStates(statesParam.split(',').filter(Boolean));
     }
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
-    // Store in localStorage and update URL
     if (selectedStates.length) {
-      localStorage.setItem('selectedStates', selectedStates.join(','));
       window.history.pushState(null, '', `?states=${selectedStates.join(',')}`);
     } else {
-      localStorage.removeItem('selectedStates');
       window.history.pushState(null, '', '');
     }
   }, [selectedStates]);
@@ -192,5 +190,13 @@ export default function Home() {
         <div className="mt-6 text-sm text-gray-600">Selected States: {selectedStates.join(', ') || 'None'}</div>
       </main>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense>
+      <HomePage />
+    </Suspense>
   );
 }
