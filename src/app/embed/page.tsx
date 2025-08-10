@@ -1,5 +1,6 @@
 'use client';
 
+import { Color, colors } from '@/data/colors';
 import { STATES } from '@/data/states';
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
@@ -8,6 +9,9 @@ function EmbeddedMapPage() {
   const searchParams = useSearchParams();
   const statesParam = searchParams.get('states') || '';
   const selectedStates = statesParam.split(',').filter(Boolean);
+
+  const colorParam = searchParams.get('color');
+  const color: Color = colorParam && colorParam in colors ? (colorParam as Color) : 'purple';
 
   return (
     <div className="flex flex-col gap-2 py-4">
@@ -28,7 +32,9 @@ function EmbeddedMapPage() {
             <g
               key={`map-embed-${state.abbreviation}`}
               className={
-                selectedStates.includes(state.abbreviation) ? 'bg-purple-600 text-purple-600' : 'bg-white text-white'
+                selectedStates.includes(state.abbreviation)
+                  ? `${colors[color].background[600].base} ${colors[color].text[600].base}`
+                  : 'bg-white text-white'
               }
               strokeWidth={1}
             >

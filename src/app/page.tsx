@@ -1,10 +1,13 @@
 'use client';
 
+import { ColorPicker } from '@/components/ColorPicker';
+import { Color, colors } from '@/data/colors';
 import { type State, STATES } from '@/data/states';
 import { useSearchParams } from 'next/navigation';
 import { MouseEvent, Suspense, useEffect, useState } from 'react';
 
 function HomePage() {
+  const [selectedColor, setSelectedColor] = useState<Color>('purple');
   const searchParams = useSearchParams();
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
 
@@ -16,12 +19,27 @@ function HomePage() {
   }, [searchParams]);
 
   useEffect(() => {
+    const colorParam = searchParams.get('color') || '';
+    if (colorParam && colorParam in colors) {
+      setSelectedColor(colorParam as Color);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const queryParams: string[] = [];
+
     if (selectedStates.length) {
-      window.history.pushState(null, '', `?states=${selectedStates.join(',')}`);
+      queryParams.push(`states=${selectedStates.join(',')}`);
+    }
+
+    queryParams.push(`color=${selectedColor}`);
+
+    if (queryParams.length) {
+      window.history.pushState(null, '', `?${queryParams.join('&')}`);
     } else {
       window.history.pushState(null, '', '');
     }
-  }, [selectedStates]);
+  }, [selectedStates, selectedColor]);
 
   const toggleState = (event: MouseEvent, state: State) => {
     event.preventDefault();
@@ -64,7 +82,7 @@ function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
+    <div className="min-h-screen bg-gray-50 text-gray-800 text-">
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <h1 className="text-lg font-semibold">State Map</h1>
@@ -75,9 +93,10 @@ function HomePage() {
         <div className="flex sm:flex-row flex-col gap-4 items-center justify-between mb-6">
           <h2 className="sm:text-2xl text-xl font-bold">Click states to select them</h2>
           <div className="relative flex gap-2">
+            <ColorPicker value={selectedColor} onChange={(color) => setSelectedColor(color)} />
             <button
               onClick={handleEmbed}
-              className="inline-flex items-center gap-2 rounded-md border border-purple-600 px-3 py-1.5 text-purple-600 hover:bg-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className={`inline-flex items-center gap-2 rounded-md border ${colors[selectedColor].border[600].base} px-3 py-1.5 ${colors[selectedColor].text[600].base} ${colors[selectedColor].background[100].hover} focus:outline-none focus:ring-2 ${colors[selectedColor].ring[500].focus}`}
               disabled={selectedStates.length === 0}
             >
               {copiedEmbed ? (
@@ -116,7 +135,7 @@ function HomePage() {
             </button>
             <button
               onClick={handleShare}
-              className="inline-flex items-center gap-2 rounded-md bg-purple-600 px-3 py-1.5 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className={`inline-flex items-center gap-2 rounded-md ${colors[selectedColor].background[600].base} px-3 py-1.5 text-white ${colors[selectedColor].background[700].hover} focus:outline-none focus:ring-2 ${colors[selectedColor].ring[500].focus}`}
               disabled={selectedStates.length === 0}
             >
               {copied ? (
@@ -168,8 +187,8 @@ function HomePage() {
                 onClick={($event) => toggleState($event, state)}
                 className={`transition-colors duration-[100ms]  ${
                   selectedStates.includes(state.abbreviation)
-                    ? 'bg-purple-600 text-purple-600 hover:bg-purple-800 hover:text-purple-800'
-                    : 'bg-white text-white hover:bg-purple-200 hover:text-purple-200'
+                    ? `${colors[selectedColor].background[600].base} ${colors[selectedColor].text[600].base} ${colors[selectedColor].background[800].hover} ${colors[selectedColor].text[800].hover}`
+                    : `bg-white text-white ${colors[selectedColor].background[200].hover} ${colors[selectedColor].text[200].hover}`
                 }`}
               >
                 <title>{state.name}</title>
@@ -184,7 +203,9 @@ function HomePage() {
               key={state.abbreviation}
               onClick={($event) => toggleState($event, state)}
               className={`p-4 rounded-lg border ${
-                selectedStates.includes(state.abbreviation) ? 'bg-purple-600 text-white' : 'bg-white text-gray-800'
+                selectedStates.includes(state.abbreviation)
+                  ? `${colors[selectedColor].background[600].base} text-white`
+                  : 'bg-white text-gray-800'
               }`}
             >
               {state.name}
